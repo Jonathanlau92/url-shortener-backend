@@ -1,6 +1,7 @@
 const express = require("express");
 const Url = require("../models/Url");
-const GenerateShortenedUrl = require("../GenerateShortenedUrl");
+const GenerateShortenedUrl = require("../src/GenerateShortenedUrl");
+const ValidateUrlProtocol = require("../src/ValidateUrlProtocol");
 
 const router = express.Router();
 
@@ -13,18 +14,20 @@ router.get("/", (req, res) => {
 router.post("/shorten", async (req, res) => {
 	// request body json parsed through middleware in server.js
 	const { origUrl } = req.body;
+	// Validate URL protocol and return a complete website link
+	const longUrl = ValidateUrlProtocol(origUrl);
 	// base URL is the shorter URL (DNS)
 	const baseUrl = process.env.BASE_URL;
 	try {
-		// Check if origUrl already exist in MongoDB. If exist, return Url, else, create a new document record
-		let url = await Url.findOne({ longUrl: origUrl });
+		// Check if origUrl already exist in MongoDB. If exist, return url, else, create a new document record
+		let url = await Url.findOne({ longUrl: longUrl });
 		if (url) {
 			res.status(200).json(url);
 		} else {
 			// This method returns the original URL with http protocol and the shortened url
-			const urlDataObj = GenerateShortenedUrl(origUrl, baseUrl);
+			const urlDataObj = GenerateShortenedUrl(baseUrl);
 			const url = await Url.create({
-				longUrl: urlDataObj.longUrl,
+				longUrl: longUrl,
 				shortUrl: urlDataObj.shortenedUrl,
 				urlId: urlDataObj.urlId,
 			});
