@@ -31,7 +31,7 @@ router.post("/shorten", async (req, res) => {
 				shortUrl: urlDataObj.shortenedUrl,
 				urlId: urlDataObj.urlId,
 			});
-			res.status(200).json({ url: url });
+			res.status(200).json(url);
 		}
 	} catch (error) {
 		res.status(400).json({ error: error.message });
