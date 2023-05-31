@@ -5,11 +5,6 @@ const ValidateUrlProtocol = require("../src/ValidateUrlProtocol");
 
 const router = express.Router();
 
-// GET all URLS
-router.get("/", (req, res) => {
-	res.json({ msg: "GET all URLs" });
-});
-
 // Create short url and save data to mongoDB
 router.post("/shorten", async (req, res) => {
 	// request body json parsed through middleware in server.js
