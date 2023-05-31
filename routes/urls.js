@@ -16,7 +16,7 @@ router.post("/shorten", async (req, res) => {
 	const { origUrl } = req.body;
 	// Validate URL protocol and return a complete website link
 	const longUrl = ValidateUrlProtocol(origUrl);
-	// base URL is the shorter URL (DNS)
+	// base URL is the DNS of the short URL link
 	const baseUrl = process.env.BASE_URL;
 	try {
 		// Check if origUrl already exist in MongoDB. If exist, return url, else, create a new document record
